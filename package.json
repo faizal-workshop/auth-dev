@@ -1,0 +1,25 @@
+{
+  "name": "auth-dev",
+  "version": "1.0.0",
+  "author": "Faizal Chan.",
+  "license": "MIT",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "@fastify/static": "^6.5.0",
+    "@fastify/view": "^7.1.0",
+    "@popperjs/core": "^2.11.8",
+    "@supabase/supabase-js": "^2.39.7",
+    "alpinejs": "^3.13.5",
+    "axios": "^1.6.7",
+    "bootstrap": "^5.3.3",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "fastify": "^4.7.0",
+    "izitoast": "^1.4.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
