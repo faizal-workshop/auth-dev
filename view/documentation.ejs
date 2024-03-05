@@ -21,7 +21,7 @@
     <div class="documentation flex-fill align-self-stretch mt-4">
         <% for (let i=0; i < documentation.length; i++) { %>
             <div class="accordion-item mb-2">
-                <div class="p-1" :class="background.<%= documentation[i].method %>[1]">
+                <div class="card p-1" :class="background.<%= documentation[i].method %>[1]">
                     <div class="d-flex flex-row align-items-center" data-bs-toggle="collapse"
                         data-bs-target="#doc-<%= i %>">
                         <div class="method card p-1" :class="background.<%= documentation[i].method %>[0]">
