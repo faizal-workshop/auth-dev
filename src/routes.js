@@ -18,6 +18,8 @@ route.patch('/user/:id', auth, authController.updateUser);
 route.delete('/user', auth, authController.deleteUser);
 route.delete('/user/:id', auth, authController.deleteUserId);
 
+route.setNotFoundHandler(defaultController.notFound);
+
 // End of routes
 
 module.exports = route;

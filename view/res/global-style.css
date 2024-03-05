@@ -1,0 +1,37 @@
+@import url('/static/bootstrap/dist/css/bootstrap.min.css');
+@import url('/static/@fortawesome/fontawesome-free/css/all.min.css');
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 30px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+span {
+    display: inline-block;
+}
+
+.divider {
+    display: inline-block;
+    width: 1px;
+    height: 27px;
+    margin: 0 16px;
+    background: #cbd5e0;
+}
+
+.documentation .d-flex {
+    font-size: .85em;
+    cursor: pointer;
+}
+
+.documentation .method {
+    width: 85px;
+    text-align: center;
+}
+
+.documentation .accordion-body {
+    margin-left: 100px !important;
+}

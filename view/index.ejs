@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= app_name %>
+    </title>
+
+    <link rel="icon" href="/res/favicon.svg">
+    <link rel="stylesheet" href="/res/global-style.css">
+
+    <script src="/static/alpinejs/dist/cdn.min.js" defer></script>
+</head>
+
+<body class="d-flex flex-column" x-data="alpineData" x-init="alpineInit()">
+
+    <div class="documentation w-100">
+        <% for (let i=0; i < documentation.length; i++) { %>
+            <div class="accordion-item mb-2">
+                <div class="p-1" :class="background.<%= documentation[i].method %>[1]">
+                    <div class="d-flex flex-row align-items-center" data-bs-toggle="collapse"
+                        data-bs-target="#doc-<%= i %>">
+                        <div class="method card p-1" :class="background.<%= documentation[i].method %>[0]">
+                            <%= documentation[i].method.toUpperCase() %>
+                        </div>
+                        <div class="flex-fill px-3 py-2">
+                            <strong>
+                                <%= documentation[i].path %>
+                            </strong>
+                        </div>
+                        <% if (documentation[i].isProtected) { %>
+                            <span class="ms-auto px-2 text-muted" title="Need Bearer token to access">
+                                <i class="fa-solid fa-lock fa-fw fa-lg"></i>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+                <div id="doc-<%= i %>" class="accordion-collapse collapse">
+                    <div class="accordion-body p-2">
+                        <%= documentation[i].description %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/res/script.js"></script>
+</body>
+
+</html>
