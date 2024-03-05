@@ -3,7 +3,10 @@ const documentation = require('../service/documentation');
 
 module.exports = {
     root: (req, res) => {
-        res.view('./view/index.ejs', { app_name: APP_NAME, documentation });
+        res.view('./view/index.ejs', { app_name: APP_NAME });
+    },
+    documentation: (req, res) => {
+        res.view('./view/documentation.ejs', { app_name: APP_NAME, documentation });
     },
     healthCheck: async (req, res) => {
         res.status(200).send({

@@ -6,6 +6,7 @@ const authController = require('../controller/auth');
 // Routes start here
 
 route.get('/', defaultController.root);
+route.get('/documentation', defaultController.documentation);
 route.get('/health-check', defaultController.healthCheck);
 
 route.post('/login', authController.login);

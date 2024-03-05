@@ -10,6 +10,10 @@ body {
     box-sizing: border-box;
 }
 
+footer {
+    font-size: .85em;
+}
+
 span {
     display: inline-block;
 }

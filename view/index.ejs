@@ -15,40 +15,15 @@
     <script src="/static/alpinejs/dist/cdn.min.js" defer></script>
 </head>
 
-<body class="d-flex flex-column" x-data="alpineData" x-init="alpineInit()">
+<body class="d-flex flex-column justify-content-center align-items-center" x-data="alpineData" x-init="alpineInit()">
+    <h1 class="my-4">
+        <%= app_name %>
+    </h1>
 
-    <div class="documentation w-100">
-        <% for (let i=0; i < documentation.length; i++) { %>
-            <div class="accordion-item mb-2">
-                <div class="p-1" :class="background.<%= documentation[i].method %>[1]">
-                    <div class="d-flex flex-row align-items-center" data-bs-toggle="collapse"
-                        data-bs-target="#doc-<%= i %>">
-                        <div class="method card p-1" :class="background.<%= documentation[i].method %>[0]">
-                            <%= documentation[i].method.toUpperCase() %>
-                        </div>
-                        <div class="flex-fill px-3 py-2">
-                            <strong>
-                                <%= documentation[i].path %>
-                            </strong>
-                        </div>
-                        <% if (documentation[i].isProtected) { %>
-                            <span class="ms-auto px-2 text-muted" title="Need Bearer token to access">
-                                <i class="fa-solid fa-lock fa-fw fa-lg"></i>
-                            </span>
-                        <% } %>
-                    </div>
-                </div>
-                <div id="doc-<%= i %>" class="accordion-collapse collapse">
-                    <div class="accordion-body p-2">
-                        <%= documentation[i].description %>
-                    </div>
-                </div>
-            </div>
-        <% } %>
-    </div>
+    <div>Wanna start using this auth service?</div>
+    <div>Check the <a href="/documentation">documentation</a> first!</div>
 
-    <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/res/script.js"></script>
+    <%- include('./footer.ejs'); %>
 </body>
 
 </html>
