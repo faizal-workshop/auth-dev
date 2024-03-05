@@ -32,7 +32,7 @@
                                 <%= documentation[i].path %>
                             </strong>
                         </div>
-                        <% if (documentation[i].isProtected) { %>
+                        <% if (documentation[i].header) { %>
                             <span class="ms-auto px-2 text-muted" title="Need Bearer token to access">
                                 <i class="fa-solid fa-lock fa-fw fa-lg"></i>
                             </span>
@@ -40,8 +40,28 @@
                     </div>
                 </div>
                 <div id="doc-<%= i %>" class="accordion-collapse collapse">
-                    <div class="accordion-body p-2">
-                        <%= documentation[i].description %>
+                    <div class="accordion-body col-10 p-2">
+                        <div class="mt-2">
+                            <%= documentation[i].description %>
+                        </div>
+                        <% if (documentation[i].header) { %>
+                            <strong class="d-block mt-4">
+                                Header
+                            </strong>
+                            <pre class="card mt-1 p-3"><%= documentation[i].header %></pre>
+                        <% } %>
+                        <% if (documentation[i].body) { %>
+                            <strong class="d-block mt-4">
+                                Body
+                            </strong>
+                            <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].body, null, 2) %></pre>
+                        <% } %>
+                        <% if (documentation[i].response) { %>
+                            <strong class="d-block mt-4">
+                                Response
+                            </strong>
+                            <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].response, null, 2) %></pre>
+                        <% } %>
                     </div>
                 </div>
             </div>

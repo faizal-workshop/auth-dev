@@ -18,6 +18,10 @@ span {
     display: inline-block;
 }
 
+pre {
+    background: #f5f5f5 !important;
+}
+
 .divider {
     display: inline-block;
     width: 1px;
