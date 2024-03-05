@@ -19,7 +19,8 @@ span {
 }
 
 pre {
-    background: #f5f5f5 !important;
+    background: #212121 !important;
+    color: #fff !important;
 }
 
 .divider {
