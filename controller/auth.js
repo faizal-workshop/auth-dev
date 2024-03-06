@@ -1,16 +1,13 @@
 const { APP_NAME } = require('../src/configs');
+const model = require('../model');
 const supabase = require('../src/supabase');
 const jwt = require('jsonwebtoken');
-const validateToken = require('../service/validateToken');
 
 module.exports = {
     login: async (req, res) => {
         const { email, password } = req.body;
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        const userData = { email, password };
+        const { data, error } = await model.login(userData);
 
         if (!error) {
             return res.status(200).send({
@@ -27,15 +24,8 @@ module.exports = {
     },
     register: async (req, res) => {
         const { name, email, password } = req.body;
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    name,
-                },
-            },
-        });
+        const userData = { name, email, password };
+        const { data, error } = await model.register(userData);
 
         if (!error) {
             return res.status(201).send({
@@ -55,7 +45,7 @@ module.exports = {
         const token = authHeader.split(' ')[1];
 
         if (token) {
-            const error = await validateToken(token);
+            const { error } = await model.checkToken(token);
 
             if (error) {
                 return res.status(401).send({

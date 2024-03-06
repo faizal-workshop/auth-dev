@@ -1,12 +1,12 @@
 const { APP_NAME } = require('../src/configs');
-const validateToken = require('../service/validateToken');
+const checkToken = require('../model');
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader.split(' ')[1];
 
     if (token) {
-        const error = validateToken(token);
+        const error = checkToken(token);
 
         if (error) {
             return res.status(401).send({

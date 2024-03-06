@@ -1,5 +1,5 @@
 const { APP_NAME } = require('../src/configs');
-const getDocs = require('../service/getDocs');
+const { getDocs } = require('../model');
 
 module.exports = {
     root: async (req, res) => {
@@ -16,6 +16,6 @@ module.exports = {
         });
     },
     notFound: async function (req, res) {
-        return await res.view('./view/notfound.ejs', { app_name: APP_NAME });
+        return await res.status(404).view('./view/notfound.ejs', { app_name: APP_NAME });
     },
 }

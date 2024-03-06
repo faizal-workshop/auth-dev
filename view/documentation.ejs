@@ -40,28 +40,30 @@
                     </div>
                 </div>
                 <div id="doc-<%= i %>" class="accordion-collapse collapse">
-                    <div class="accordion-body col-10 p-2">
-                        <div class="mt-2">
-                            <%= documentation[i].description %>
+                    <div class="accordion-body p-2">
+                        <div class="col-md-11 col-lg-10 col-xl-9">
+                            <div class="mt-2">
+                                <%= documentation[i].description %>
+                            </div>
+                            <% if (documentation[i].header) { %>
+                                <strong class="d-block mt-4">
+                                    Header
+                                </strong>
+                                <pre class="card mt-1 p-3"><%= documentation[i].header %></pre>
+                            <% } %>
+                            <% if (documentation[i].body) { %>
+                                <strong class="d-block mt-4">
+                                    Body
+                                </strong>
+                                <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].body, null, 2) %></pre>
+                            <% } %>
+                            <% if (documentation[i].response) { %>
+                                <strong class="d-block mt-4">
+                                    Response
+                                </strong>
+                                <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].response, null, 2) %></pre>
+                            <% } %>
                         </div>
-                        <% if (documentation[i].header) { %>
-                            <strong class="d-block mt-4">
-                                Header
-                            </strong>
-                            <pre class="card mt-1 p-3"><%= documentation[i].header %></pre>
-                        <% } %>
-                        <% if (documentation[i].body) { %>
-                            <strong class="d-block mt-4">
-                                Body
-                            </strong>
-                            <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].body, null, 2) %></pre>
-                        <% } %>
-                        <% if (documentation[i].response) { %>
-                            <strong class="d-block mt-4">
-                                Response
-                            </strong>
-                            <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].response, null, 2) %></pre>
-                        <% } %>
                     </div>
                 </div>
             </div>

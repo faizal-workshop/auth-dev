@@ -19,6 +19,7 @@ span {
 }
 
 pre {
+    width: 100%;
     background: #212121 !important;
     color: #fff !important;
 }
@@ -41,6 +42,8 @@ pre {
     text-align: center;
 }
 
-.documentation .accordion-body {
-    margin-left: 100px !important;
+@media (min-width: 768px) {
+    .documentation .accordion-body {
+        margin-left: 100px !important;
+    }
 }
