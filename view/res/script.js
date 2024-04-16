@@ -11,6 +11,7 @@ function alpineData() {
         },
         alpineInit: function () {
             if (new Date().getFullYear() > 2018) this.date = '2018 - ' + this.date;
+            hljs.highlightAll();
         },
     }
 }

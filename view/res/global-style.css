@@ -14,16 +14,6 @@ footer {
     font-size: .85em;
 }
 
-span {
-    display: inline-block;
-}
-
-pre {
-    width: 100%;
-    background: #212121 !important;
-    color: #fff !important;
-}
-
 .divider {
     display: inline-block;
     width: 1px;

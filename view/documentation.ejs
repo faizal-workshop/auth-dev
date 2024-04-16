@@ -10,6 +10,7 @@
     </title>
 
     <link rel="icon" href="/res/favicon.svg">
+    <link rel="stylesheet" href="/res/highlight.js/styles/dark.min.css">
     <link rel="stylesheet" href="/res/global-style.css">
 
     <script src="/static/alpinejs/dist/cdn.min.js" defer></script>
@@ -33,7 +34,7 @@
                             </strong>
                         </div>
                         <% if (documentation[i].header) { %>
-                            <span class="ms-auto px-2 text-muted" title="Need Bearer token to access">
+                            <span class="d-inline-block ms-auto px-2 text-muted" title="Need Bearer token to access">
                                 <i class="fa-solid fa-lock fa-fw fa-lg"></i>
                             </span>
                         <% } %>
@@ -49,19 +50,25 @@
                                 <strong class="d-block mt-4">
                                     Header
                                 </strong>
-                                <pre class="card mt-1 p-3"><%= documentation[i].header %></pre>
+                                <pre class="card mt-1">
+                                    <code class="plaintext"><%= documentation[i].header %></code>
+                                </pre>
                             <% } %>
                             <% if (documentation[i].body) { %>
                                 <strong class="d-block mt-4">
                                     Body
                                 </strong>
-                                <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].body, null, 2) %></pre>
+                                <pre class="card mt-1">
+                                    <code class="json"><%= JSON.stringify(documentation[i].body, null, 2) %></code>
+                                </pre>
                             <% } %>
                             <% if (documentation[i].response) { %>
                                 <strong class="d-block mt-4">
                                     Response
                                 </strong>
-                                <pre class="card mt-1 p-3"><%= JSON.stringify(documentation[i].response, null, 2) %></pre>
+                                <pre class="card mt-1">
+                                    <code class="json"><%= JSON.stringify(documentation[i].response, null, 2) %></code>
+                                </pre>
                             <% } %>
                         </div>
                     </div>
@@ -72,8 +79,9 @@
 
     <%- include('./footer.ejs'); %>
 
-        <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="/res/script.js"></script>
+    <script src="/res/highlight.js/highlight.min.js"></script>
+    <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/res/script.js"></script>
 </body>
 
 </html>
