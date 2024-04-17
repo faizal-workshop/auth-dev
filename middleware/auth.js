@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
 
                 return res.status(401).send({
                     application: APP_NAME,
-                    message: 'Invalid authentication token.',
+                    message: 'Invalid authentication token!',
                 });
             }
         });
@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
     } else {
         return res.status(401).send({
             application: APP_NAME,
-            message: 'Missing authentication token.',
+            message: 'Missing authentication token!',
         });
     }
 }

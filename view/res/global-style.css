@@ -10,8 +10,11 @@ body {
     box-sizing: border-box;
 }
 
-footer {
-    font-size: .85em;
+.app-image {
+    width: min(250px, 80%);
+    padding-top: min(250px, 80%);
+    background: url('tiger.png') center center no-repeat;
+    background-size: cover;
 }
 
 .divider {

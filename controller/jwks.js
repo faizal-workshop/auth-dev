@@ -1,5 +1,5 @@
 const { APP_NAME } = require('../src/configs');
-const model = require('../model/jwk');
+const model = require('../model/jwks');
 
 module.exports = {
     getData: async (req, res) => {

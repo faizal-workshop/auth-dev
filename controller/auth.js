@@ -12,7 +12,7 @@ module.exports = {
         if (!email || !password) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Email and password should be provided',
+                message: 'Email and password should be provided!',
             });
         }
 
@@ -22,7 +22,7 @@ module.exports = {
 
             return res.status(200).send({
                 application: APP_NAME,
-                message: 'New user account registered successfully',
+                message: 'New user account registered successfully.',
                 data: {
                     id: result.uid,
                     email: result.email,
@@ -32,7 +32,7 @@ module.exports = {
         } catch (e) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Register user account failed',
+                message: 'Register user account failed!',
             });
         }
     },
@@ -42,7 +42,7 @@ module.exports = {
         if (!email || !password) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Email and password should be provided',
+                message: 'Email and password should be provided!',
             });
         }
 
@@ -58,13 +58,13 @@ module.exports = {
 
             return res.status(200).send({
                 application: APP_NAME,
-                message: 'Login with email success',
+                message: 'Login with email success.',
                 data: token,
             });
         } catch (e) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Login with email failed, please try again',
+                message: 'Login with email failed, please try again!',
             });
         }
     },
@@ -75,7 +75,7 @@ module.exports = {
         if (!token) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Missing authentication token',
+                message: 'Missing authentication token!',
             });
         }
 
@@ -94,7 +94,7 @@ module.exports = {
 
             return res.status(201).send({
                 application: APP_NAME,
-                message: 'Token is valid',
+                message: 'Token is valid.',
                 data: {
                     remainingTime,
                     token,
@@ -103,7 +103,7 @@ module.exports = {
         } catch (e) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Token is invalid',
+                message: 'Token is invalid!',
             });
         }
     },

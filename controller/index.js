@@ -1,16 +1,22 @@
 const { APP_NAME } = require('../src/configs');
-// const { getDocs } = require('../model');
+const model = require('../model');
 
 module.exports = {
     root: async (req, res) => {
         return res.view('./view/index.ejs', { app_name: APP_NAME });
     },
     documentation: async (req, res) => {
-        // const documentation = await getDocs();
-        // return res.view('./view/documentation.ejs', {
-        //     app_name: APP_NAME,
-        //     documentation
-        // });
+        const documentation = await model.documentation();
+
+        documentation.forEach((item) => {
+            if (item.body) item.body = JSON.parse(item.body);
+            if (item.response) item.response = JSON.parse(item.response);
+        });
+
+        return res.view('./view/documentation.ejs', {
+            app_name: APP_NAME,
+            documentation
+        });
     },
     healthCheck: async (req, res) => {
         return res.status(200).send({
