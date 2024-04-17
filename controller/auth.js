@@ -97,6 +97,7 @@ module.exports = {
                 message: 'Token is valid.',
                 data: {
                     remainingTime,
+                    payload: verify,
                     token,
                 },
             });
