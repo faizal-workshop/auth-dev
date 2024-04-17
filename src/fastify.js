@@ -6,6 +6,10 @@ const app = fastify({
     disableRequestLogging: true
 });
 
+app.register(require('@fastify/helmet'), {
+    contentSecurityPolicy: false,
+});
+
 app.register(require('@fastify/static'), {
     root: path.join(__dirname, '../view'),
 });
