@@ -7,7 +7,7 @@ const keyFolderPath = path.join(__dirname, '..', '.keys');
 
 module.exports = {
     registerEmail: async (req, res) => {
-        const { email = '', password = '' } = req.body;
+        const { name = '', email = '', password = '' } = req.body;
 
         if (!email || !password) {
             return res.status(401).send({
@@ -17,16 +17,18 @@ module.exports = {
         }
 
         try {
-            const userData = { email, password };
+            const userData = { name, email, password };
             const result = await model.registerEmail(userData);
 
             return res.status(200).send({
                 application: APP_NAME,
                 message: 'New user account registered successfully.',
                 data: {
-                    id: result.uid,
+                    id: result.id,
+                    name: result.name,
                     email: result.email,
-                    createdAt: result.metadata.createdAt,
+                    usertype: result.usertype,
+                    createdAt: result.createdAt,
                 },
             });
         } catch (e) {
@@ -52,8 +54,10 @@ module.exports = {
             const userData = { email, password };
             const result = await model.loginEmail(userData);
             const token = jwt.sign({
-                id: result.uid,
+                id: result.id,
+                name: result.name,
                 email: result.email,
+                usertype: result.usertype,
             }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
 
             return res.status(200).send({
