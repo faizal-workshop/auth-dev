@@ -1,6 +1,7 @@
 const { APP_NAME, JWT_EXPIRATION } = require('../src/configs');
 const model = require('../model/auth');
 const jwt = require('jsonwebtoken');
+const Joi = require('joi');
 const fs = require('fs');
 const path = require('path');
 const keyFolderPath = path.join(__dirname, '..', '.keys');
@@ -14,14 +15,31 @@ async function getJwtSecret() {
 
 module.exports = {
     registerEmail: async (req, res) => {
-        const { name = '', email = '', password = '' } = req.body;
+        const schema = Joi.object({
+            name: Joi.string().max(30).messages({
+                'string.max': 'Name must be less than or equal to 30 characters long!',
+            }),
+            email: Joi.string().email().required().messages({
+                'string.email': 'Please provide a valid email address!',
+                'any.required': 'Email is required!',
+                'string.empty': 'Email is required!',
+            }),
+            password: Joi.string().min(8).required().messages({
+                'string.min': 'Password must be at least 8 characters long!',
+                'any.required': 'Password is required!',
+                'string.empty': 'Password is required!',
+            }),
+        });
+        const { error } = schema.validate(req.body);
 
-        if (!email || !password) {
+        if (error) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Email and password should be provided!',
+                message: error.details[0].message,
             });
         }
+
+        const { name = '', email = '', password = '' } = req.body;
 
         try {
             const userData = { name, email, password };
@@ -46,6 +64,27 @@ module.exports = {
         }
     },
     loginEmail: async (req, res) => {
+        const schema = Joi.object({
+            email: Joi.string().email().required().messages({
+                'string.email': 'Please provide a valid email address!',
+                'any.required': 'Email is required!',
+                'string.empty': 'Email is required!',
+            }),
+            password: Joi.string().min(8).required().messages({
+                'string.min': 'Password must be at least 8 characters long!',
+                'any.required': 'Password is required!',
+                'string.empty': 'Password is required!',
+            }),
+        });
+        const { error } = schema.validate(req.body);
+
+        if (error) {
+            return res.status(401).send({
+                application: APP_NAME,
+                message: error.details[0].message,
+            });
+        }
+
         const { email = '', password = '' } = req.body;
 
         if (!email || !password) {
@@ -118,6 +157,26 @@ module.exports = {
         }
     },
     updateUser: async (req, res) => {
+        const schema = Joi.object({
+            name: Joi.string().max(30).messages({
+                'string.max': 'Name must be less than or equal to 30 characters long!',
+            }),
+            email: Joi.string().email().messages({
+                'string.email': 'Please provide a valid email address!',
+            }),
+            password: Joi.string().min(8).messages({
+                'string.min': 'Password must be at least 8 characters long!',
+            }),
+        });
+        const { error } = schema.validate(req.body);
+
+        if (error) {
+            return res.status(401).send({
+                application: APP_NAME,
+                message: error.details[0].message,
+            });
+        }
+
         const userId = req.params.id;
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(' ')[1];

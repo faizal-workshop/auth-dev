@@ -24,6 +24,7 @@
     "firebase": "^10.11.0",
     "firebase-admin": "^12.1.0",
     "izitoast": "^1.4.0",
+    "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2"
   }
 }
