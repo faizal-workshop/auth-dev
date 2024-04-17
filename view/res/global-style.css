@@ -6,7 +6,9 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 30px;
-    background: #fffaf0;
+    background-color: #fffaf0;
+    background-image: radial-gradient(#eeaa00 .5px, #fffaf0 .5px);
+    background-size: 12px 12px;
     font-family: sans-serif;
     box-sizing: border-box;
 }

@@ -20,6 +20,7 @@
     "ejs": "^3.1.8",
     "fastify": "^4.7.0",
     "firebase": "^10.11.0",
+    "firebase-admin": "^12.1.0",
     "izitoast": "^1.4.0",
     "jsonwebtoken": "^9.0.2"
   }

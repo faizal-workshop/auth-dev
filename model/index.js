@@ -1,16 +1,15 @@
-const firebase = require('../src/firebase');
-const { getFirestore, collection, getDocs } = require('firebase/firestore');
-const db = getFirestore(firebase);
+const firebaseAdmin = require('../src/firebase-admin');
+const db = firebaseAdmin.firestore();
 
 module.exports = {
     documentation: async function () {
         try {
-            const docsRef = collection(db, 'api-documentation');
-            const querySnapshot = await getDocs(docsRef);
+            const docsRef = db.collection('api-documentation');
+            const querySnapshot = await docsRef.get();
             const documents = [];
 
             querySnapshot.forEach((i) => {
-                documents.push({ ...i.data() });
+                documents.push(i.data());
             });
 
             return documents;

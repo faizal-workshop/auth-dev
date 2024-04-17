@@ -26,7 +26,7 @@ module.exports = {
         const usertype = decoded.usertype;
 
         if (usertype !== 'administrator') {
-            return res.status(401).send({
+            return res.status(403).send({
                 application: APP_NAME,
                 message: 'Invalid authentication token!',
             });

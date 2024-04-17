@@ -14,6 +14,9 @@ route.post('/register', authController.registerEmail);
 route.post('/login', authController.loginEmail);
 route.post('/check-token', authController.checkToken);
 
+route.patch('/user/:id', auth, authController.updateUser);
+route.delete('/user/:id', auth, authController.deleteUser);
+
 route.get('/jwks', jwksController.getData);
 route.post('/jwks', auth, jwksController.createData);
 

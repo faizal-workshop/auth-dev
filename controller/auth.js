@@ -5,6 +5,13 @@ const fs = require('fs');
 const path = require('path');
 const keyFolderPath = path.join(__dirname, '..', '.keys');
 
+async function getJwtSecret() {
+    const keyPath = path.join(keyFolderPath, 'private.pem');
+    const jwtSecret = fs.readFileSync(keyPath, 'utf8');
+
+    return jwtSecret;
+}
+
 module.exports = {
     registerEmail: async (req, res) => {
         const { name = '', email = '', password = '' } = req.body;
@@ -20,7 +27,7 @@ module.exports = {
             const userData = { name, email, password };
             const result = await model.registerEmail(userData);
 
-            return res.status(200).send({
+            return res.status(201).send({
                 application: APP_NAME,
                 message: 'New user account registered successfully.',
                 data: {
@@ -49,10 +56,9 @@ module.exports = {
         }
 
         try {
-            const keyPath = path.join(keyFolderPath, 'private.pem');
-            const jwtSecret = fs.readFileSync(keyPath, 'utf8');
             const userData = { email, password };
             const result = await model.loginEmail(userData);
+            const jwtSecret = await getJwtSecret();
             const token = jwt.sign({
                 id: result.id,
                 name: result.name,
@@ -84,8 +90,7 @@ module.exports = {
         }
 
         try {
-            const keyPath = path.join(keyFolderPath, 'private.pem');
-            const jwtSecret = fs.readFileSync(keyPath, 'utf8');
+            const jwtSecret = await getJwtSecret();
             const verify = jwt.verify(token, jwtSecret, { algorithms: ['RS256'] });
             const expirationTime = verify.exp;
             const currentTimeInSeconds = Math.floor(Date.now() / 1000);
@@ -96,7 +101,7 @@ module.exports = {
                 seconds: remainingTimeInSeconds % 60,
             };
 
-            return res.status(201).send({
+            return res.status(200).send({
                 application: APP_NAME,
                 message: 'Token is valid.',
                 data: {
@@ -109,6 +114,80 @@ module.exports = {
             return res.status(401).send({
                 application: APP_NAME,
                 message: 'Token is invalid!',
+            });
+        }
+    },
+    updateUser: async (req, res) => {
+        const userId = req.params.id;
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(' ')[1];
+        const decoded = jwt.decode(token);
+        const decodedId = decoded.id;
+        const usertype = decoded.usertype;
+        const issuedAt = decoded.iat;
+        const { name = '', email = '', password = '' } = req.body;
+
+        if (usertype !== 'administrator' && userId !== decodedId) {
+            return res.status(403).send({
+                application: APP_NAME,
+                message: 'Invalid authentication token!',
+            });
+        }
+
+        try {
+            const userData = {};
+            if (name) userData.name = name;
+            if (email) userData.email = email;
+            if (password) userData.password = password;
+
+            const result = await model.updateUser(userId, userData);
+            const jwtSecret = await getJwtSecret();
+            const token = jwt.sign({
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                usertype: result.usertype,
+                iat: issuedAt
+            }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
+
+            return res.status(200).send({
+                application: APP_NAME,
+                message: 'User account updated successfully.',
+                data: token,
+            });
+        } catch (e) {
+            return res.status(500).send({
+                application: APP_NAME,
+                message: 'Edit user account failed!',
+            });
+        }
+    },
+    deleteUser: async (req, res) => {
+        const userId = req.params.id;
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(' ')[1];
+        const decoded = jwt.decode(token);
+        const decodedId = decoded.id;
+        const usertype = decoded.usertype;
+
+        if (usertype !== 'administrator' && userId !== decodedId) {
+            return res.status(403).send({
+                application: APP_NAME,
+                message: 'Invalid authentication token!',
+            });
+        }
+
+        try {
+            const result = await model.deleteUser(userId);
+
+            return res.status(200).send({
+                application: APP_NAME,
+                message: 'User account deleted successfully.',
+            });
+        } catch (e) {
+            return res.status(500).send({
+                application: APP_NAME,
+                message: 'Delete user account failed!',
             });
         }
     },
