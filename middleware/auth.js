@@ -1,5 +1,5 @@
 const { APP_NAME } = require('../src/configs');
-const checkToken = require('../model');
+const checkToken = require('../model/auth');
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers.authorization;

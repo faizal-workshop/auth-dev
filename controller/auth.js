@@ -1,61 +1,82 @@
-const { APP_NAME } = require('../src/configs');
-const model = require('../model');
-const supabase = require('../src/supabase');
+const { APP_NAME, JWT_EXPIRATION } = require('../src/configs');
+const model = require('../model/auth');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    login: async (req, res) => {
-        const { email, password } = req.body;
-        const userData = { email, password };
-        const { data, error } = await model.login(userData);
+    registerEmail: async (req, res) => {
+        const { email = '', password = '' } = req.body;
 
-        if (!error) {
+        if (!email || !password) {
+            return res.status(401).send({
+                application: APP_NAME,
+                message: 'Email and password should be provided',
+            });
+        }
+
+        try {
+            const userData = { email, password };
+            const result = await model.registerEmail(userData);
+
             return res.status(200).send({
                 application: APP_NAME,
-                message: 'Get user success',
-                data: data.session.access_token,
+                message: 'New user account registered successfully',
+                data: {
+                    id: result.uid,
+                    email: result.email,
+                    createdAt: result.metadata.createdAt,
+                },
             });
-        }
-
-        return res.status(401).send({
-            application: APP_NAME,
-            message: error.message,
-        });
-    },
-    register: async (req, res) => {
-        const { name, email, password } = req.body;
-        const userData = { name, email, password };
-        const { data, error } = await model.register(userData);
-
-        if (!error) {
-            return res.status(201).send({
+        } catch (e) {
+            return res.status(401).send({
                 application: APP_NAME,
-                message: 'Create user success',
-                data,
+                message: 'Register user account failed',
+            });
+        }
+    },
+    loginEmail: async (req, res) => {
+        const { email = '', password = '' } = req.body;
+
+        if (!email || !password) {
+            return res.status(401).send({
+                application: APP_NAME,
+                message: 'Email and password should be provided',
             });
         }
 
-        return res.status(401).send({
-            application: APP_NAME,
-            message: error.message,
-        });
+        try {
+            const userData = { email, password };
+            const result = await model.loginEmail(userData);
+            const token = jwt.sign({
+                id: result.uid,
+                email: result.email,
+            }, 'secret', { expiresIn: JWT_EXPIRATION });
+
+            return res.status(200).send({
+                application: APP_NAME,
+                message: 'Login with email success',
+                data: token,
+            });
+        } catch (e) {
+            return res.status(401).send({
+                application: APP_NAME,
+                message: 'Login with email failed, please try again',
+            });
+        }
     },
     checkToken: async (req, res) => {
         const authHeader = req.headers.authorization;
-        const token = authHeader.split(' ')[1];
+        const token = authHeader && authHeader.split(' ')[1];
 
-        if (token) {
-            const { error } = await model.checkToken(token);
+        if (!token) {
+            return res.status(401).send({
+                application: APP_NAME,
+                message: 'Missing authentication token',
+            });
+        }
 
-            if (error) {
-                return res.status(401).send({
-                    application: APP_NAME,
-                    message: error.message,
-                });
-            }
-
-            const decodedToken = jwt.decode(token);
-            const expirationTime = decodedToken.exp;
+        try {
+            const verify = jwt.verify(token, 'secret');
+            const expirationTime = verify.exp;
             const currentTimeInSeconds = Math.floor(Date.now() / 1000);
             const remainingTimeInSeconds = expirationTime - currentTimeInSeconds;
             const remainingTime = {
@@ -66,54 +87,17 @@ module.exports = {
 
             return res.status(201).send({
                 application: APP_NAME,
-                message: 'Token valid',
+                message: 'Token is valid',
                 data: {
                     remainingTime,
                     token,
                 },
             });
-        } else {
+        } catch (e) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Missing authentication token!',
+                message: 'Token is not valid',
             });
         }
-    },
-    getUser: async (req, res) => {
-        // const { data: { users }, error } = await supabase.auth.admin.listUsers();
-    },
-    getUserId: async (req, res) => {
-        // const { data: { user } } = await supabase.auth.getUser();
-    },
-    updateUser: async (req, res) => {
-        const id = req.params.id;
-        const { name, email, password } = req.body;
-
-        // const data = {};
-        // if (name) data.name = name;
-        // if (email) data.email = email;
-        // if (password) data.password = await bcrypt.hash(password, 10);
-
-        // await supabase.auth.updateUser(data);
-
-        // return res.status(200).send({
-        //     application: APP_NAME,
-        //     message: 'Update user success',
-        // });
-    },
-    deleteUser: async (req, res) => {
-
-        // return res.status(204).send({
-        //     application: APP_NAME,
-        //     message: 'Delete all user success',
-        // });
-    },
-    deleteUserId: async (req, res) => {
-        const id = req.params.id;
-
-        // return res.status(204).send({
-        //     application: APP_NAME,
-        //     message: 'Delete user success',
-        // });
     },
 }
