@@ -6,6 +6,7 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 30px;
+    background: #fffaf0;
     font-family: sans-serif;
     box-sizing: border-box;
 }
@@ -33,6 +34,10 @@ body {
 .documentation .method {
     width: 85px;
     text-align: center;
+}
+
+.text-small {
+    font-size: .85rem;
 }
 
 @media (min-width: 768px) {

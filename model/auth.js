@@ -19,13 +19,13 @@ module.exports = {
             const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
             const meta = doc(db, 'usermeta', userCredential.user.uid);
             const addUsertype = await setDoc(meta, {
-                name: userData.name || 'User',
+                name: userData.name || 'Registered User',
                 usertype: 'user',
             });
 
             return {
                 id: userCredential.user.uid,
-                name: userData.name || 'User',
+                name: userData.name || 'Registered User',
                 email: userCredential.user.email,
                 usertype: 'user',
                 createdAt: userCredential.user.metadata.createdAt,

@@ -17,9 +17,16 @@
 </head>
 
 <body class="d-flex flex-column align-items-center" x-data="alpineData" x-init="alpineInit()">
-    <h1 class="my-4 fs-2">Documentation</h1>
+    <h1 class="my-3 fs-2">Documentation</h1>
+    <div class="card d-flex flex-row align-items-center mt-3 p-3 text-bg-warning">
+        <i class="fa-solid fa-triangle-exclamation fa-fw fa-xl"></i>
+        <div class="flex-fill mx-3 text-small">
+            Please keep in mind that this service is only intended for personal learning and/or application
+            development purposes.
+        </div>
+    </div>
 
-    <div class="documentation flex-fill align-self-stretch mt-4">
+    <div class="documentation flex-fill align-self-stretch mt-3">
         <% for (let i=0; i < documentation.length; i++) { %>
             <div class="accordion-item mb-2">
                 <div class="card p-1" :class="background.<%= documentation[i].method %>[1]">
@@ -37,7 +44,7 @@
                             <span class="d-inline-block ms-auto px-2 text-muted" title="Need Bearer token to access">
                                 <i class="fa-solid fa-lock fa-fw fa-lg"></i>
                             </span>
-                        <% } %>
+                            <% } %>
                     </div>
                 </div>
                 <div id="doc-<%= i %>" class="accordion-collapse collapse">
@@ -53,35 +60,35 @@
                                 <pre class="card mt-1">
                                     <code class="plaintext"><%= documentation[i].header %></code>
                                 </pre>
-                            <% } %>
-                            <% if (documentation[i].body) { %>
-                                <strong class="d-block mt-4">
-                                    Body
-                                </strong>
-                                <pre class="card mt-1">
+                                <% } %>
+                                    <% if (documentation[i].body) { %>
+                                        <strong class="d-block mt-4">
+                                            Body
+                                        </strong>
+                                        <pre class="card mt-1">
                                     <code class="json"><%= JSON.stringify(documentation[i].body, null, 2) %></code>
                                 </pre>
-                            <% } %>
-                            <% if (documentation[i].response) { %>
-                                <strong class="d-block mt-4">
-                                    Response
-                                </strong>
-                                <pre class="card mt-1">
+                                        <% } %>
+                                            <% if (documentation[i].response) { %>
+                                                <strong class="d-block mt-4">
+                                                    Response
+                                                </strong>
+                                                <pre class="card mt-1">
                                     <code class="json"><%= JSON.stringify(documentation[i].response, null, 2) %></code>
                                 </pre>
-                            <% } %>
+                                                <% } %>
                         </div>
                     </div>
                 </div>
             </div>
-        <% } %>
+            <% } %>
     </div>
 
     <%- include('./footer.ejs'); %>
 
-    <script src="/res/highlight.js/highlight.min.js"></script>
-    <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/res/script.js"></script>
+        <script src="/res/highlight.js/highlight.min.js"></script>
+        <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/res/script.js"></script>
 </body>
 
 </html>
