@@ -1,6 +1,9 @@
 const { APP_NAME, JWT_EXPIRATION } = require('../src/configs');
 const model = require('../model/auth');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
+const keyFolderPath = path.join(__dirname, '..', '.keys');
 
 module.exports = {
     registerEmail: async (req, res) => {
@@ -44,12 +47,14 @@ module.exports = {
         }
 
         try {
+            const keyPath = path.join(keyFolderPath, 'private.pem');
+            const jwtSecret = fs.readFileSync(keyPath, 'utf8');
             const userData = { email, password };
             const result = await model.loginEmail(userData);
             const token = jwt.sign({
                 id: result.uid,
                 email: result.email,
-            }, 'secret', { expiresIn: JWT_EXPIRATION });
+            }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
 
             return res.status(200).send({
                 application: APP_NAME,
@@ -75,7 +80,9 @@ module.exports = {
         }
 
         try {
-            const verify = jwt.verify(token, 'secret');
+            const keyPath = path.join(keyFolderPath, 'private.pem');
+            const jwtSecret = fs.readFileSync(keyPath, 'utf8');
+            const verify = jwt.verify(token, jwtSecret, { algorithms: ['RS256'] });
             const expirationTime = verify.exp;
             const currentTimeInSeconds = Math.floor(Date.now() / 1000);
             const remainingTimeInSeconds = expirationTime - currentTimeInSeconds;
@@ -96,7 +103,7 @@ module.exports = {
         } catch (e) {
             return res.status(401).send({
                 application: APP_NAME,
-                message: 'Token is not valid',
+                message: 'Token is invalid',
             });
         }
     },

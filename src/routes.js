@@ -2,6 +2,7 @@ const route = require('./fastify');
 const auth = { preHandler: [require('../middleware/auth')] };
 const defaultController = require('../controller');
 const authController = require('../controller/auth');
+const jwkController = require('../controller/jwk');
 
 // Routes start here
 
@@ -11,7 +12,10 @@ route.get('/health-check', defaultController.healthCheck);
 
 route.post('/register', authController.registerEmail);
 route.post('/login', authController.loginEmail);
-route.post('/token', authController.checkToken);
+route.post('/check-token', authController.checkToken);
+
+route.get('/jwks', jwkController.getData);
+route.post('/jwks', auth, jwkController.createData);
 
 route.setNotFoundHandler(defaultController.notFound);
 
