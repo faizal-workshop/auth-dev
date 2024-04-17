@@ -10,6 +10,11 @@ app.register(require('@fastify/helmet'), {
     contentSecurityPolicy: false,
 });
 
+app.register(require('@fastify/rate-limit'), {
+    max: 10,
+    timeWindow: 1000,
+});
+
 app.register(require('@fastify/static'), {
     root: path.join(__dirname, '../view'),
 });
