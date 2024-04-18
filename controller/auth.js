@@ -33,13 +33,13 @@ module.exports = {
         const { error } = schema.validate(req.body);
 
         if (error) {
-            return res.status(401).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: error.details[0].message,
             });
         }
 
-        const { name = '', email = '', password = '' } = req.body;
+        const { name = '', email = '', password = '' } = req.body || {};
 
         try {
             const userData = { name, email, password };
@@ -79,13 +79,13 @@ module.exports = {
         const { error } = schema.validate(req.body);
 
         if (error) {
-            return res.status(401).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: error.details[0].message,
             });
         }
 
-        const { email = '', password = '' } = req.body;
+        const { email = '', password = '' } = req.body || {};
 
         if (!email || !password) {
             return res.status(401).send({
@@ -171,7 +171,7 @@ module.exports = {
         const { error } = schema.validate(req.body);
 
         if (error) {
-            return res.status(401).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: error.details[0].message,
             });
@@ -184,7 +184,7 @@ module.exports = {
         const decodedId = decoded.id;
         const usertype = decoded.usertype;
         const issuedAt = decoded.iat;
-        const { name = '', email = '', password = '' } = req.body;
+        const { name = '', email = '', password = '' } = req.body || {};
 
         if (usertype !== 'administrator' && userId !== decodedId) {
             return res.status(403).send({
