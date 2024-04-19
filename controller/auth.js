@@ -33,7 +33,7 @@ module.exports = {
         const { error } = schema.validate(req.body);
 
         if (error) {
-            return res.status(400).send({
+            return await res.status(400).send({
                 application: APP_NAME,
                 message: error.details[0].message,
             });
@@ -45,7 +45,7 @@ module.exports = {
             const userData = { name, email, password };
             const result = await model.registerEmail(userData);
 
-            return res.status(201).send({
+            return await res.status(201).send({
                 application: APP_NAME,
                 message: 'New user account registered successfully.',
                 data: {
@@ -57,7 +57,7 @@ module.exports = {
                 },
             });
         } catch (e) {
-            return res.status(401).send({
+            return await res.status(401).send({
                 application: APP_NAME,
                 message: 'Register user account failed!',
             });
@@ -79,7 +79,7 @@ module.exports = {
         const { error } = schema.validate(req.body);
 
         if (error) {
-            return res.status(400).send({
+            return await res.status(400).send({
                 application: APP_NAME,
                 message: error.details[0].message,
             });
@@ -88,7 +88,7 @@ module.exports = {
         const { email = '', password = '' } = req.body || {};
 
         if (!email || !password) {
-            return res.status(401).send({
+            return await res.status(401).send({
                 application: APP_NAME,
                 message: 'Email and password should be provided!',
             });
@@ -105,13 +105,13 @@ module.exports = {
                 usertype: result.usertype,
             }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
 
-            return res.status(200).send({
+            return await res.status(200).send({
                 application: APP_NAME,
                 message: 'Login with email success.',
                 data: token,
             });
         } catch (e) {
-            return res.status(401).send({
+            return await res.status(401).send({
                 application: APP_NAME,
                 message: 'Login with email failed, please try again!',
             });
@@ -122,7 +122,7 @@ module.exports = {
         const token = authHeader && authHeader.split(' ')[1];
 
         if (!token) {
-            return res.status(401).send({
+            return await res.status(401).send({
                 application: APP_NAME,
                 message: 'Missing authentication token!',
             });
@@ -140,7 +140,7 @@ module.exports = {
                 seconds: remainingTimeInSeconds % 60,
             };
 
-            return res.status(200).send({
+            return await res.status(200).send({
                 application: APP_NAME,
                 message: 'Token is valid.',
                 data: {
@@ -150,7 +150,7 @@ module.exports = {
                 },
             });
         } catch (e) {
-            return res.status(401).send({
+            return await res.status(401).send({
                 application: APP_NAME,
                 message: 'Token is invalid!',
             });
@@ -171,7 +171,7 @@ module.exports = {
         const { error } = schema.validate(req.body);
 
         if (error) {
-            return res.status(400).send({
+            return await res.status(400).send({
                 application: APP_NAME,
                 message: error.details[0].message,
             });
@@ -187,7 +187,7 @@ module.exports = {
         const { name = '', email = '', password = '' } = req.body || {};
 
         if (usertype !== 'administrator' && userId !== decodedId) {
-            return res.status(403).send({
+            return await res.status(403).send({
                 application: APP_NAME,
                 message: 'Invalid authentication token!',
             });
@@ -209,13 +209,13 @@ module.exports = {
                 iat: issuedAt
             }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
 
-            return res.status(200).send({
+            return await res.status(200).send({
                 application: APP_NAME,
                 message: 'User account updated successfully.',
                 data: token,
             });
         } catch (e) {
-            return res.status(500).send({
+            return await res.status(500).send({
                 application: APP_NAME,
                 message: 'Edit user account failed!',
             });
@@ -230,7 +230,7 @@ module.exports = {
         const usertype = decoded.usertype;
 
         if (usertype !== 'administrator' && userId !== decodedId) {
-            return res.status(403).send({
+            return await res.status(403).send({
                 application: APP_NAME,
                 message: 'Invalid authentication token!',
             });
@@ -239,12 +239,12 @@ module.exports = {
         try {
             const result = await model.deleteUser(userId);
 
-            return res.status(200).send({
+            return await res.status(200).send({
                 application: APP_NAME,
                 message: 'User account deleted successfully.',
             });
         } catch (e) {
-            return res.status(500).send({
+            return await res.status(500).send({
                 application: APP_NAME,
                 message: 'Delete user account failed!',
             });

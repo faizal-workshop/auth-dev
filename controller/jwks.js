@@ -11,7 +11,7 @@ module.exports = {
             n: result.split('\n').slice(1, -2).join(''),
         };
 
-        return res.status(200).send({
+        return await res.status(200).send({
             application: APP_NAME,
             message: 'Get JWKS success.',
             data: {
@@ -26,7 +26,7 @@ module.exports = {
         const usertype = decoded.usertype;
 
         if (usertype !== 'administrator') {
-            return res.status(403).send({
+            return await res.status(403).send({
                 application: APP_NAME,
                 message: 'Invalid authentication token!',
             });
@@ -39,7 +39,7 @@ module.exports = {
             n: result.split('\n').slice(1, -2).join(''),
         };
 
-        return res.status(201).send({
+        return await res.status(201).send({
             application: APP_NAME,
             message: 'New keys generated and saved',
             data: {
