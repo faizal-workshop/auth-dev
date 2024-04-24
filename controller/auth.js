@@ -1,4 +1,4 @@
-const { APP_NAME, JWT_EXPIRATION } = require('../src/configs');
+const { APP_NAME, JWT_ACCESS_EXPIRATION, JWT_REFRESH_EXPIRATION } = require('../src/configs');
 const model = require('../model/auth');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
@@ -11,6 +11,25 @@ async function getJwtSecret() {
     const jwtSecret = fs.readFileSync(keyPath, 'utf8');
 
     return jwtSecret;
+}
+
+async function verifyJwt(token) {
+    const jwtSecret = await getJwtSecret();
+    const payload = jwt.verify(token, jwtSecret, {
+        algorithms: ['RS256'],
+    });
+
+    return payload;
+}
+
+async function signJwt(payload, expiresIn) {
+    const jwtSecret = await getJwtSecret();
+    const token = jwt.sign(payload, jwtSecret, {
+        algorithm: 'RS256',
+        expiresIn,
+    });
+
+    return token;
 }
 
 module.exports = {
@@ -75,6 +94,7 @@ module.exports = {
                 'any.required': 'Password is required!',
                 'string.empty': 'Password is required!',
             }),
+            remember: Joi.boolean(),
         });
         const { error } = schema.validate(req.body);
 
@@ -85,7 +105,7 @@ module.exports = {
             });
         }
 
-        const { email = '', password = '' } = req.body || {};
+        const { email = '', password = '', remember = false } = req.body || {};
 
         if (!email || !password) {
             return await res.status(401).send({
@@ -97,23 +117,90 @@ module.exports = {
         try {
             const userData = { email, password };
             const result = await model.loginEmail(userData);
-            const jwtSecret = await getJwtSecret();
-            const token = jwt.sign({
-                id: result.id,
-                name: result.name,
-                email: result.email,
-                usertype: result.usertype,
-            }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
+
+            if (remember) {
+                const token = {
+                    access_token: await signJwt({
+                        id: result.id,
+                        name: result.name,
+                        email: result.email,
+                        usertype: result.usertype,
+                    }, JWT_ACCESS_EXPIRATION),
+                    refresh_token: await signJwt({
+                        id: result.id,
+                        type: 'refresh',
+                    }, JWT_REFRESH_EXPIRATION),
+                }
+
+                return await res.status(200).send({
+                    application: APP_NAME,
+                    message: 'Login with email success.',
+                    data: token,
+                });
+            } else {
+                const token = {
+                    access_token: await signJwt({
+                        id: result.id,
+                        name: result.name,
+                        email: result.email,
+                        usertype: result.usertype,
+                    }, JWT_ACCESS_EXPIRATION),
+                }
+
+                return await res.status(200).send({
+                    application: APP_NAME,
+                    message: 'Login with email success.',
+                    data: token,
+                });
+            }
+        } catch (e) {
+            return await res.status(401).send({
+                application: APP_NAME,
+                message: 'Login with email failed, please try again!',
+            });
+        }
+    },
+    loginToken: async (req, res) => {
+        const authHeader = req.headers.authorization;
+        const refreshToken = authHeader && authHeader.split(' ')[1];
+
+        if (!refreshToken) {
+            return await res.status(401).send({
+                application: APP_NAME,
+                message: 'Refresh token should be provided!',
+            });
+        }
+
+        try {
+            const verify = await verifyJwt(refreshToken);
+
+            if (verify.type !== 'refresh') {
+                return await res.status(401).send({
+                    application: APP_NAME,
+                    message: 'Invalid refresh token!',
+                });
+            }
+
+            const id = verify.id;
+            const result = await model.loginToken(id);
+            const token = {
+                access_token: await signJwt({
+                    id: result.id,
+                    name: result.name,
+                    email: result.email,
+                    usertype: result.usertype,
+                }, JWT_ACCESS_EXPIRATION),
+            }
 
             return await res.status(200).send({
                 application: APP_NAME,
-                message: 'Login with email success.',
+                message: 'Refresh access token success.',
                 data: token,
             });
         } catch (e) {
             return await res.status(401).send({
                 application: APP_NAME,
-                message: 'Login with email failed, please try again!',
+                message: 'Refresh access token failed, please try again!',
             });
         }
     },
@@ -129,8 +216,7 @@ module.exports = {
         }
 
         try {
-            const jwtSecret = await getJwtSecret();
-            const verify = jwt.verify(token, jwtSecret, { algorithms: ['RS256'] });
+            const verify = await verifyJwt(token);
             const expirationTime = verify.exp;
             const currentTimeInSeconds = Math.floor(Date.now() / 1000);
             const remainingTimeInSeconds = expirationTime - currentTimeInSeconds;
@@ -200,14 +286,15 @@ module.exports = {
             if (password) userData.password = password;
 
             const result = await model.updateUser(userId, userData);
-            const jwtSecret = await getJwtSecret();
-            const token = jwt.sign({
-                id: result.id,
-                name: result.name,
-                email: result.email,
-                usertype: result.usertype,
-                iat: issuedAt
-            }, jwtSecret, { algorithm: 'RS256', expiresIn: JWT_EXPIRATION });
+            const token = {
+                access_token: await signJwt({
+                    id: result.id,
+                    name: result.name,
+                    email: result.email,
+                    usertype: result.usertype,
+                    iat: issuedAt
+                }, JWT_ACCESS_EXPIRATION),
+            }
 
             return await res.status(200).send({
                 application: APP_NAME,

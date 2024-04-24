@@ -12,6 +12,7 @@ route.get('/health-check', defaultController.healthCheck);
 
 route.post('/register', authController.registerEmail);
 route.post('/login', authController.loginEmail);
+route.post('/refresh-token', authController.loginToken);
 route.post('/check-token', authController.checkToken);
 
 route.patch('/user/:id', auth, authController.updateUser);

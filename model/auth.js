@@ -57,6 +57,23 @@ module.exports = {
             throw new Error(e);
         }
     },
+    loginToken: async function (id) {
+        try {
+            const userCredential = await adminAuth.getUser(id);
+            const meta = await adminDb.collection('usermeta').doc(id).get();
+            const metaData = meta.data();
+
+            return {
+                id: userCredential.uid,
+                name: metaData.name,
+                email: userCredential.email,
+                usertype: metaData.usertype,
+            };
+        } catch (e) {
+            console.error(e);
+            throw new Error(e);
+        }
+    },
     updateUser: async function (userId, userData) {
         const { name = '', email = '', password = '' } = userData;
 
