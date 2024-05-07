@@ -3,7 +3,9 @@ const model = require('../model');
 
 module.exports = {
     root: async (req, res) => {
-        return await res.status(200).view('./view/index.ejs', { app_name: APP_NAME });
+        return await res.status(200).view('./view/index.ejs', {
+            app_name: APP_NAME,
+        });
     },
     documentation: async (req, res) => {
         const documentation = await model.documentation();
@@ -15,7 +17,7 @@ module.exports = {
 
         return await res.status(200).view('./view/documentation.ejs', {
             app_name: APP_NAME,
-            documentation
+            documentation,
         });
     },
     healthCheck: async (req, res) => {
@@ -25,6 +27,8 @@ module.exports = {
         });
     },
     notFound: async (req, res) => {
-        return await res.status(404).view('./view/notfound.ejs', { app_name: APP_NAME });
+        return await res.status(404).view('./view/notfound.ejs', {
+            app_name: APP_NAME,
+        });
     },
 }
