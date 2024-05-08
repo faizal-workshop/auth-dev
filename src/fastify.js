@@ -11,8 +11,8 @@ app.register(require('@fastify/helmet'), {
 });
 
 app.register(require('@fastify/rate-limit'), {
-    max: 10,
-    timeWindow: 1000,
+    max: 100,
+    timeWindow: '1 minute',
 });
 
 app.register(require('@fastify/static'), {

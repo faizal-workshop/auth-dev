@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="documentation flex-fill align-self-stretch mt-3">
+    <section class="documentation flex-fill align-self-stretch mt-3" x-cloak>
         <% for (let i=0; i < documentation.length; i++) { %>
             <div class="accordion-item mb-2">
                 <div class="card p-1" :class="background.<%= documentation[i].method %>[1]">
@@ -82,7 +82,7 @@
                 </div>
             </div>
         <% } %>
-    </div>
+    </section>
 
     <%- include('./footer.ejs'); %>
 
