@@ -16,7 +16,15 @@ app.register(require('@fastify/rate-limit'), {
 });
 
 app.register(require('@fastify/static'), {
-    root: path.join(__dirname, '../view'),
+    root: path.join(__dirname, '../public'),
+    wildcard: false,
+    defaultHeaders: {
+        'Content-Type': {
+            '.css': 'text/css',
+            '.svg': 'image/svg+xml',
+            '.js': 'application/javascript',
+        }
+    },
 });
 
 app.register(require('@fastify/static'), {
