@@ -17,6 +17,7 @@ app.register(require('@fastify/rate-limit'), {
 
 app.register(require('@fastify/static'), {
     root: path.join(__dirname, '../public'),
+    prefix: '/res/',
     wildcard: false,
     defaultHeaders: {
         'Content-Type': {
