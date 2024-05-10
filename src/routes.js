@@ -8,6 +8,7 @@ const jwksController = require('../controller/jwks');
 
 route.get('/', defaultController.root);
 route.get('/documentation', defaultController.documentation);
+route.get('/robots.txt', defaultController.robotsTxt);
 route.get('/health-check', defaultController.healthCheck);
 
 route.post('/register', authController.registerEmail);

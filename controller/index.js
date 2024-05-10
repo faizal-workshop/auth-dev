@@ -20,6 +20,13 @@ module.exports = {
             documentation,
         });
     },
+    robotsTxt: async (req, res) => {
+        const robotsTxtContent = `User-agent: *\nDisallow: /`;
+
+        return res.status(200)
+            .header('Content-Type', 'text/plain')
+            .send(robotsTxtContent);
+    },
     healthCheck: async (req, res) => {
         return await res.status(200).send({
             application: APP_NAME,
