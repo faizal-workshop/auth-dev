@@ -1,32 +1,40 @@
-const { APP_NAME } = require('../src/configs');
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path');
+import { APP_NAME } from '../source/configs.js';
+import jwt from 'jsonwebtoken';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
 
-module.exports = (req, res, next) => {
+export default function (req, res, next) {
     const bearerToken = req.headers.authorization;
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
     const keyFolderPath = path.join(__dirname, '..', '.keys');
     const keyPath = path.join(keyFolderPath, 'public.pem');
-    const jwtSecret = fs.readFileSync(keyPath, 'utf8');
+    const jwtPublic = fs.readFileSync(keyPath, 'utf8');
 
-    if (bearerToken) {
-        const token = bearerToken.split(' ')[1];
-        const verify = jwt.verify(token, jwtSecret, (e, decoded) => {
-            if (e) {
-                console.error(e);
-
-                return res.status(401).send({
-                    application: APP_NAME,
-                    message: 'Invalid authentication token!',
-                });
-            }
-        });
-
-        next();
-    } else {
+    if (!bearerToken) {
         return res.status(401).send({
             application: APP_NAME,
             message: 'Missing authentication token!',
         });
     }
+
+    const token = bearerToken.split(' ')[1];
+
+    jwt.verify(token, jwtPublic, {
+        algorithms: ['RS256'],
+    }, (e, d) => {
+        if (e) {
+            console.error(e);
+            return res.status(403).send({
+                application: APP_NAME,
+                message: 'Invalid authentication token!',
+            });
+        }
+
+        req.user = d;
+        next();
+    });
 }

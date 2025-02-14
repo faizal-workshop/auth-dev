@@ -1,12 +1,12 @@
-const {
+import {
     FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN,
     FIREBASE_PROJECT_ID,
     FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_SENDER_ID,
-    FIREBASE_APP_ID
-} = require('./configs');
-const { initializeApp } = require('firebase/app');
+    FIREBASE_APP_ID,
+} from './configs.js';
+import { initializeApp } from 'firebase/app';
 
 const config = {
     apiKey: FIREBASE_API_KEY,
@@ -15,7 +15,7 @@ const config = {
     storageBucket: FIREBASE_STORAGE_BUCKET,
     messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
     appId: FIREBASE_APP_ID,
-};
+}
 const firebase = initializeApp(config);
 
-module.exports = firebase;
+export default firebase;
