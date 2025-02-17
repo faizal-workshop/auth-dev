@@ -5,7 +5,7 @@ const db = firebaseAdmin.firestore();
 
 export default {
     root: async function (req, res) {
-        return await res.status(200).view('./view/index.ejs', {
+        return res.status(200).view('./view/index.ejs', {
             app_name: APP_NAME,
         });
     },
@@ -23,7 +23,7 @@ export default {
             if (item.response) item.response = JSON.parse(item.response);
         });
 
-        return await res.status(200).view('./view/documentation.ejs', {
+        return res.status(200).view('./view/documentation.ejs', {
             app_name: APP_NAME,
             documentation: documents,
         });
@@ -31,7 +31,7 @@ export default {
     robotsTxt: async (req, res) => {
         const robotsTxtContent = `User-agent: *\nDisallow: /`;
 
-        return await res.status(200)
+        return res.status(200)
             .header('Content-Type', 'text/plain')
             .send(robotsTxtContent);
     },

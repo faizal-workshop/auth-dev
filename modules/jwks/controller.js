@@ -10,6 +10,25 @@ const __dirname = path.dirname(__filename);
 
 const keyFolderPath = path.join(__dirname, '..', '..', '.keys');
 
+function generatePublicJWKS(publicKey) {
+    const keyBuffer = Buffer.from(publicKey
+        .replace(/-----BEGIN PUBLIC KEY-----/, '')
+        .replace(/-----END PUBLIC KEY-----/, '')
+        .replace(/\n/g, ''), 'base64');
+
+    const jwk = crypto.createPublicKey({
+        key: keyBuffer,
+        format: 'der',
+        type: 'spki',
+    }).export({ format: 'jwk' });
+
+    return {
+        kty: jwk.kty,
+        n: jwk.n,
+        e: jwk.e,
+    }
+}
+
 async function generateRSAKeyPair() {
     try {
         const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
@@ -24,11 +43,11 @@ async function generateRSAKeyPair() {
             }
         });
 
-        const privateKeyFile = path.join(keyFolderPath, 'private.pem');
-        const publicKeyFile = path.join(keyFolderPath, 'public.pem');
+        const privateKeyPath = path.join(keyFolderPath, 'private.pem');
+        const publicKeyPath = path.join(keyFolderPath, 'public.pem');
 
-        fs.writeFileSync(privateKeyFile, privateKey);
-        fs.writeFileSync(publicKeyFile, publicKey);
+        fs.writeFileSync(privateKeyPath, privateKey);
+        fs.writeFileSync(publicKeyPath, publicKey);
 
         return publicKey;
     } catch (e) {
@@ -40,21 +59,14 @@ async function generateRSAKeyPair() {
 export default {
     getData: async (req, res) => {
         try {
-            const keyFolderPath = path.join(__dirname, '..', '..', '.keys');
             const keyPath = path.join(keyFolderPath, 'public.pem');
-            const jwtPublic =
+            const publicKey =
                 fs.existsSync(keyPath) ? fs.readFileSync(keyPath, 'utf8') : null;
-
-            const jwkPublicKey = {
-                kty: 'RSA',
-                e: 'AQAB',
-                n: jwtPublic.split('\n').slice(1, -2).join(''),
-            }
 
             return res.status(200).send({
                 application: APP_NAME,
                 message: 'Get JWKS success.',
-                data: [jwkPublicKey],
+                data: [generatePublicJWKS(publicKey)],
             });
         } catch (e) {
             return res.status(500).send({
@@ -68,7 +80,7 @@ export default {
         const verify = validateToken(bearer);
 
         if (verify.usertype !== 'administrator') {
-            return await res.status(401).send({
+            return res.status(401).send({
                 application: APP_NAME,
                 message: 'Error, only administrator can generate new JWKS!',
             });
@@ -78,16 +90,10 @@ export default {
             if (!fs.existsSync(keyFolderPath)) fs.mkdirSync(keyFolderPath);
             const result = await generateRSAKeyPair();
 
-            const jwkPublicKey = {
-                kty: 'RSA',
-                e: 'AQAB',
-                n: result.split('\n').slice(1, -2).join(''),
-            }
-
             return res.status(201).send({
                 application: APP_NAME,
                 message: 'New keys generated and saved successfully.',
-                data: [jwkPublicKey],
+                data: [generatePublicJWKS(result)],
             });
         } catch (e) {
             return res.status(500).send({

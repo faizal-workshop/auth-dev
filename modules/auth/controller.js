@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 
 const keyFolderPath = path.join(__dirname, '..', '..', '.keys');
 const keyPath = path.join(keyFolderPath, 'private.pem');
-const jwtPrivate =
+const privateKey =
     fs.existsSync(keyPath) ? fs.readFileSync(keyPath, 'utf8') : null;
 
 export default {
@@ -28,7 +28,7 @@ export default {
         const { error } = validate.login({ email, password } || {});
 
         if (error) {
-            return await res.status(400).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: 'Invalid email or password, please try again!',
             });
@@ -37,12 +37,13 @@ export default {
         try {
             const payload = await model.login({ email, password });
 
-            const accessToken = jwt.sign(payload, jwtPrivate, {
+            const accessToken = jwt.sign(payload, privateKey, {
+                header: { kid: 'auth-dev' },
                 algorithm: 'RS256',
                 expiresIn: JWT_ACCESS_EXPIRATION,
             });
 
-            return await res.status(200).send({
+            return res.status(200).send({
                 application: APP_NAME,
                 message: 'Login success.',
                 data: accessToken,
@@ -70,7 +71,7 @@ export default {
                 seconds: remainingTimeInSeconds % 60,
             }
 
-            return await res.status(200).send({
+            return res.status(200).send({
                 application: APP_NAME,
                 message: 'JWT is valid.',
                 data: {
@@ -80,7 +81,7 @@ export default {
                 },
             });
         } catch (e) {
-            return await res.status(401).send({
+            return res.status(401).send({
                 application: APP_NAME,
                 message: 'JWT is invalid!',
             });
@@ -100,7 +101,7 @@ export default {
         } || {});
 
         if (error) {
-            return await res.status(400).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: 'Error, please check all required fields and try again!',
             });
@@ -113,7 +114,7 @@ export default {
                 password,
             });
 
-            return await res.status(201).send({
+            return res.status(201).send({
                 application: APP_NAME,
                 message: 'New user account registered successfully.',
                 data: response,
@@ -135,7 +136,7 @@ export default {
         } = req.body || {};
 
         if (!name && !email && !password) {
-            return await res.status(400).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: 'No data provided, nothing to update!',
             });
@@ -148,7 +149,7 @@ export default {
         } || {});
 
         if (error) {
-            return await res.status(400).send({
+            return res.status(400).send({
                 application: APP_NAME,
                 message: 'Invalid name, email, or password, please try again!',
             });
@@ -165,7 +166,7 @@ export default {
 
             const response = await model.editData(verify.id, data);
 
-            return await res.status(200).send({
+            return res.status(200).send({
                 application: APP_NAME,
                 message: 'User account updated successfully.',
                 data: response,
@@ -186,7 +187,7 @@ export default {
         try {
             await model.deleteData(verify.id);
 
-            return await res.status(200).send({
+            return res.status(200).send({
                 application: APP_NAME,
                 message: 'User account deleted successfully.',
             });
