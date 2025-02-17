@@ -12,7 +12,7 @@ route.register(authRoutes);
 route.register(jwksRoutes, { prefix: '/jwks' });
 
 route.setNotFoundHandler(async function (req, res) {
-    return await res.status(404).send({
+    return res.status(404).send({
         application: APP_NAME,
         message: 'Route or method not found!',
     });
