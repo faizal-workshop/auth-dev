@@ -19,7 +19,7 @@
         "bootstrap": "^5.3.3",
         "dotenv": "^16.4.7",
         "ejs": "^3.1.10",
-        "fastify": "^4.29.0",
+        "fastify": "^5.2.1",
         "firebase": "^10.14.1",
         "firebase-admin": "^12.7.0",
         "joi": "^17.13.3",

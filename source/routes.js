@@ -9,7 +9,7 @@ import jwksRoutes from '../modules/jwks/routes.js';
 
 route.register(defaultRoutes);
 route.register(authRoutes);
-route.register(jwksRoutes, { prefix: '/jwks' });
+route.register(jwksRoutes, { prefix: '/jwks.json' });
 
 route.setNotFoundHandler(async function (req, res) {
     return res.status(404).send({
