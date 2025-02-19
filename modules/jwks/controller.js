@@ -24,6 +24,8 @@ function generatePublicJWKS(publicKey) {
 
     return {
         kty: jwk.kty,
+        use: 'sig',
+        alg: 'RS256',
         n: jwk.n,
         e: jwk.e,
     }
@@ -64,9 +66,7 @@ export default {
                 fs.existsSync(keyPath) ? fs.readFileSync(keyPath, 'utf8') : null;
 
             return res.status(200).send({
-                application: APP_NAME,
-                message: 'Get JWKS success.',
-                data: [generatePublicJWKS(publicKey)],
+                keys: [generatePublicJWKS(publicKey)],
             });
         } catch (e) {
             return res.status(500).send({
