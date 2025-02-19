@@ -1,12 +1,11 @@
 import fastify from 'fastify';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import fastifyCors from '@fastify/cors';
 import fastifyHelmet from '@fastify/helmet';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
-import fastifyCors from '@fastify/cors';
-import fastifyMultipart from '@fastify/multipart';
 import ejs from 'ejs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -15,12 +14,16 @@ const dependencyPath = join(__dirname, '..', 'node_modules');
 
 const app = fastify({
     logger: true,
-    disableRequestLogging: true
+    disableRequestLogging: true,
 });
+
+app.register(fastifyCors);
 
 app.register(fastifyHelmet, {
     contentSecurityPolicy: false,
-    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+    crossOriginOpenerPolicy: {
+        policy: 'same-origin-allow-popups',
+    },
 });
 
 app.register(fastifyRateLimit, {
@@ -50,8 +53,5 @@ app.register(fastifyStatic, {
 app.register(fastifyView, {
     engine: { ejs },
 });
-
-app.register(fastifyCors);
-app.register(fastifyMultipart);
 
 export default app;
