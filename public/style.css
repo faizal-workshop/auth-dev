@@ -1,5 +1,5 @@
-@import url('/static/bootstrap/dist/css/bootstrap.min.css');
-@import url('/static/@fortawesome/fontawesome-free/css/all.min.css');
+@import url('/static/bootstrap/css/bootstrap.min.css');
+@import url('/static/fontawesome/css/all.min.css');
 
 body {
     width: 100%;
@@ -16,7 +16,7 @@ body {
 .app-image {
     width: min(250px, 80%);
     padding-top: min(250px, 80%);
-    background: url('tiger.png') center center no-repeat;
+    background: url('favicon.webp') center center no-repeat;
     background-size: cover;
 }
 

@@ -15,8 +15,5 @@ Node.js simple authorization service for development environment
 ## Stack Used
 - [Fastify](https://fastify.dev/)
 - [Bootstrap CSS](https://getbootstrap.com/)
+- [Alpine.js](https://alpinejs.dev/)
 - [Google Firebase](https://firebase.google.com/)
-
-## Picture Credit
-Photo by **Amélie Rec** on Pexels\
-https://www.pexels.com/photo/grayscale-photo-of-tiger-lying-on-ground-3860030/
