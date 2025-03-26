@@ -61,9 +61,11 @@ async function generateRSAKeyPair() {
 export default {
     getData: async (req, res) => {
         try {
+            if (!fs.existsSync(keyFolderPath)) fs.mkdirSync(keyFolderPath);
             const keyPath = path.join(keyFolderPath, 'public.pem');
-            const publicKey =
-                fs.existsSync(keyPath) ? fs.readFileSync(keyPath, 'utf8') : null;
+            const publicKey = fs.existsSync(keyPath)
+                ? fs.readFileSync(keyPath, 'utf8')
+                : await generateRSAKeyPair();
 
             return res.status(200).send({
                 keys: [generatePublicJWKS(publicKey)],
