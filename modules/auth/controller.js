@@ -81,6 +81,8 @@ export default {
                 },
             });
         } catch (e) {
+            console.error(e);
+
             return res.status(401).send({
                 application: APP_NAME,
                 message: 'JWT is invalid!',

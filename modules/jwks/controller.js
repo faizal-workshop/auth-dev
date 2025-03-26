@@ -69,6 +69,8 @@ export default {
                 keys: [generatePublicJWKS(publicKey)],
             });
         } catch (e) {
+            console.error(e);
+
             return res.status(500).send({
                 application: APP_NAME,
                 message: 'Error when getting JWKS!',
@@ -96,6 +98,8 @@ export default {
                 data: [generatePublicJWKS(result)],
             });
         } catch (e) {
+            console.error(e);
+
             return res.status(500).send({
                 application: APP_NAME,
                 message: 'Error when creating JWKS!',
