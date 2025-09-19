@@ -49,7 +49,7 @@ export default {
                 data: accessToken,
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(500).send({
                 application: APP_NAME,
@@ -81,7 +81,7 @@ export default {
                 },
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(401).send({
                 application: APP_NAME,
@@ -122,7 +122,7 @@ export default {
                 data: response,
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(500).send({
                 application: APP_NAME,
@@ -174,7 +174,7 @@ export default {
                 data: response,
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(500).send({
                 application: APP_NAME,
@@ -194,7 +194,7 @@ export default {
                 message: 'User account deleted successfully.',
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(500).send({
                 application: APP_NAME,

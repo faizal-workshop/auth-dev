@@ -27,7 +27,8 @@ export default function (req, res, next) {
         algorithms: ['RS256'],
     }, (e, d) => {
         if (e) {
-            console.error(e);
+            req.log.error(e);
+
             return res.status(403).send({
                 application: APP_NAME,
                 message: 'Invalid authentication token!',

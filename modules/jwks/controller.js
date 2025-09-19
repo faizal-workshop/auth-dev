@@ -53,7 +53,6 @@ async function generateRSAKeyPair() {
 
         return publicKey;
     } catch (e) {
-        console.error(e);
         throw new Error('Cannot generate key pair!');
     }
 }
@@ -71,7 +70,7 @@ export default {
                 keys: [generatePublicJWKS(publicKey)],
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(500).send({
                 application: APP_NAME,
@@ -100,7 +99,7 @@ export default {
                 data: [generatePublicJWKS(result)],
             });
         } catch (e) {
-            console.error(e);
+            req.log.error(e);
 
             return res.status(500).send({
                 application: APP_NAME,
