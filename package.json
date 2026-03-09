@@ -1,0 +1,34 @@
+{
+    "name": "auth-dev",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "start": "node source/app.js",
+        "dev": "nodemon source/app.js"
+    },
+    "dependencies": {
+        "@fastify/cors": "^10.1.0",
+        "@fastify/helmet": "^13.0.2",
+        "@fastify/rate-limit": "^10.3.0",
+        "@fastify/static": "^8.3.0",
+        "@fastify/view": "^10.0.2",
+        "@fortawesome/fontawesome-free": "^6.7.2",
+        "@highlightjs/cdn-assets": "^11.11.1",
+        "@popperjs/core": "^2.11.8",
+        "alpinejs": "^3.15.9",
+        "bootstrap": "^5.3.8",
+        "dotenv": "^16.6.1",
+        "ejs": "^3.1.10",
+        "fastify": "^5.8.4",
+        "firebase": "^10.14.1",
+        "firebase-admin": "^12.7.0",
+        "joi": "^17.13.3",
+        "jsonwebtoken": "^9.0.3"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "protobufjs"
+        ]
+    }
+}
