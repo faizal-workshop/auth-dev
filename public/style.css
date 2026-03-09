@@ -1,0 +1,53 @@
+@import url('/static/bootstrap/css/bootstrap.min.css');
+@import url('/static/fontawesome/css/all.min.css');
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 30px;
+    background-image: radial-gradient(#eeaa00 .5px, #fffaf0 .5px);
+    background-color: #fffaf0;
+    background-size: 12px 12px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+.app-image {
+    width: min(250px, 80%);
+    padding-top: min(250px, 80%);
+    background: url('tiger.webp') center center no-repeat;
+    background-size: cover;
+}
+
+.divider {
+    display: inline-block;
+    align-self: center;
+    width: 1px;
+    height: 27px;
+    margin: 0 16px;
+    background: #cbd5e0;
+}
+
+.documentation .d-flex {
+    font-size: .85em;
+    cursor: pointer;
+}
+
+.documentation .method {
+    width: 85px;
+    text-align: center;
+}
+
+.text-small {
+    font-size: .85rem;
+}
+
+@media (min-width: 768px) {
+    .documentation .accordion-body {
+        margin-left: 100px !important;
+    }
+}
