@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/webp" href="/res/favicon.svg" />
+    <title>Documentation | <%= app_name %></title>
+    <link rel="stylesheet" href="/static/highlightjs/styles/dark.min.css" />
+    <link rel="stylesheet" href="/res/style.css" />
+    <script src="/static/alpinejs/cdn.min.js" defer></script>
+</head>
+
+<body class="flex-column" x-data="alpineData" x-init="alpineInit()">
+    <h1 class="my-3 fs-2">Documentation</h1>
+    <div class="card d-flex flex-row align-items-center mt-4 px-2 py-3 text-bg-warning">
+        <i class="fa-solid fa-triangle-exclamation fa-fw fa-xl ms-2"></i>
+        <div class="flex-fill mx-3 text-small">
+            Please note that this service is exclusively designed only for educational purposes in
+            application development.
+        </div>
+    </div>
+
+    <section class="documentation flex-fill align-self-stretch mt-3" x-cloak>
+        <% for (let i=0; i < documentation.length; i++) { %>
+            <div class="accordion-item mb-2">
+                <div class="card p-1" :class="background.<%= documentation[i].method %>[1]">
+                    <div class="d-flex flex-row align-items-center" data-bs-toggle="collapse"
+                        data-bs-target="#doc-<%= i %>">
+                        <div class="method card p-1" :class="background.<%= documentation[i].method %>[0]">
+                            <%= documentation[i].method.toUpperCase() %>
+                        </div>
+                        <div class="flex-fill px-3 py-2">
+                            <strong>
+                                <%= documentation[i].path %>
+                            </strong>
+                        </div>
+                        <% if (documentation[i].header) { %>
+                            <span class="d-inline-block ms-auto px-2 text-muted" title="Need Bearer token to access">
+                                <i class="fa-solid fa-lock fa-fw fa-lg"></i>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+                <div id="doc-<%= i %>" class="accordion-collapse collapse">
+                    <div class="accordion-body p-2">
+                        <div class="col-md-11 col-lg-10 col-xl-9">
+                            <div class="mt-2">
+                                <%= documentation[i].description %>
+                            </div>
+                            <% if (documentation[i].header) { %>
+                                <strong class="d-block mt-4">
+                                    Header
+                                </strong>
+                                <pre class="card mt-1">
+                                    <code class="plaintext"><%= documentation[i].header %></code>
+                                </pre>
+                            <% } %>
+                            <% if (documentation[i].body) { %>
+                                <strong class="d-block mt-4">
+                                    Body
+                                </strong>
+                                <pre class="card mt-1">
+                                    <code class="json"><%= JSON.stringify(documentation[i].body, null, 2) %></code>
+                                </pre>
+                            <% } %>
+                            <% if (documentation[i].response) { %>
+                                <strong class="d-block mt-4">
+                                    Response
+                                </strong>
+                                <pre class="card mt-1">
+                                    <code class="json"><%= JSON.stringify(documentation[i].response, null, 2) %></code>
+                                </pre>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </section>
+
+    <%- include('./footer.ejs'); %>
+</body>
+
+</html>
